@@ -1,0 +1,106 @@
+package com.david.configurer;
+
+import com.david.core.RabbitMQConstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * =================================
+ * Created by David on 2019/3/29.
+ * mail:    17610897521@163.com
+ * 描述:
+ */
+@Configuration
+public class RabbitMQConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(RabbitMQConfig.class);
+
+    /**
+     * 声明默认交换机    点对点(一对一)
+     *
+     * @return
+     */
+    @Bean
+    DirectExchange defaultExchange() {
+        return new DirectExchange(RabbitMQConstant.DEFAULT_EXCHANGE_NAME.getName(), true, false);
+    }
+
+    /**
+     * 声明简单队列 "hello"
+     *
+     * @return
+     */
+    @Bean
+    public Queue simpleQueue() {
+        Map<String, Object> arguments = new HashMap<>();
+        arguments.put("x-max-priority", 225);
+        return new Queue(RabbitMQConstant.SIMPLE_QUEUE_NAME.getName(), true, false, false, arguments);
+    }
+
+    @Bean
+    public Binding bindingSimpleQueue() {
+        //队列绑定到exchange上，再绑定好路由键
+        return BindingBuilder.bind(simpleQueue()).to(defaultExchange()).with(RabbitMQConstant.SIMPLE_QUEUE_ROUTING_KEY.getName());
+    }
+
+    //************************************************ 延迟队列 start ************************************************
+
+    /**
+     * 声明消费者队列
+     *
+     * @return
+     */
+    @Bean
+    public Queue consumerQueue() {
+        return new Queue(RabbitMQConstant.CONSUMER_QUEUE_NAME.getName(), true, false, false);
+    }
+
+    /**
+     * 将消费者队列绑定到交换机上
+     *
+     * @return
+     */
+    @Bean
+    public Binding binding() {
+        //队列绑定到exchange上，再绑定好路由键
+        return BindingBuilder.bind(consumerQueue()).to(defaultExchange()).with(RabbitMQConstant.CONSUMER_QUEUE_ROUTING_KEY.getName());
+    }
+
+    /**
+     * 声明死信队列
+     *
+     * @return
+     */
+    @Bean
+    public Queue deadLetterQueue() {
+        Map<String, Object> arguments = new HashMap<>();
+        //死信队列交换机
+        arguments.put("x-dead-letter-exchange", RabbitMQConstant.DEFAULT_EXCHANGE_NAME.getName());
+        //死信队列 routing-key
+        arguments.put("x-dead-letter-routing-key", RabbitMQConstant.CONSUMER_QUEUE_ROUTING_KEY.getName());
+        //创建死信队列
+        Queue queue = new Queue(RabbitMQConstant.DEAD_LETTER_QUEUE_NAME.getName(), true, false, false, arguments);
+        return queue;
+    }
+
+    /**
+     * 将死信队列绑定到交换机上
+     *
+     * @return
+     */
+    @Bean
+    public Binding directBinding() {
+        return BindingBuilder.bind(deadLetterQueue()).to(defaultExchange()).with(RabbitMQConstant.DEAD_LETTER_QUEUE_ROUTING_KEY.getName());
+    }
+    //************************************************ 延迟队列 end ************************************************
+
+}
