@@ -33,6 +33,37 @@ public class DemoController {
     Producer producer;
 
     /**
+     * 发送消息
+     * http://localhost:8080/simpQueue?msg=%E6%B6%88%E6%81%AF%E6%B5%8B%E8%AF%95
+     *
+     * @param msg 消息
+     * @return
+     */
+    @RequestMapping("/simpQueue")
+    public Result simpleQueue(String msg) {
+        //发送简单消息
+        rabbitTemplate.convertAndSend(RabbitMQConstant.DEFAULT_EXCHANGE_NAME.getName()
+            , RabbitMQConstant.SIMPLE_QUEUE_ROUTING_KEY.getName()
+            , msg);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * http://localhost:8080/pullQueue?msg=%E6%B6%88%E6%81%AF%E6%B5%8B%E8%AF%95
+     *
+     * @param msg
+     * @return
+     */
+    @RequestMapping("/pullQueue")
+    public Result pullQueue(String msg) {
+        //发送简单消息
+        rabbitTemplate.convertAndSend(RabbitMQConstant.DEFAULT_EXCHANGE_NAME.getName()
+            , RabbitMQConstant.PULL_QUEUE_ROUTING_KEY.getName()
+            , msg);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    /**
      * 延迟队列
      * 延迟10秒    http://localhost:8080/delayQueue?msg=%E6%B5%8B%E8%AF%95&millis=10000
      *
@@ -44,7 +75,7 @@ public class DemoController {
     public Result delayQueue(String msg, long millis) {
         //发送延迟消息
         producer.delayQueueSend(RabbitMQConstant.DEFAULT_EXCHANGE_NAME.getName(),
-                RabbitMQConstant.DEAD_LETTER_QUEUE_ROUTING_KEY.getName(), msg, millis);
+            RabbitMQConstant.DEAD_LETTER_QUEUE_ROUTING_KEY.getName(), msg, millis);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -67,8 +98,8 @@ public class DemoController {
             }
         };
         rabbitTemplate.convertAndSend(RabbitMQConstant.DEFAULT_EXCHANGE_NAME.getName()
-                , RabbitMQConstant.SIMPLE_QUEUE_ROUTING_KEY.getName()
-                , msg, messagePostProcessor);
+            , RabbitMQConstant.SIMPLE_QUEUE_ROUTING_KEY.getName()
+            , msg, messagePostProcessor);
         return ResultGenerator.genSuccessResult();
     }
 

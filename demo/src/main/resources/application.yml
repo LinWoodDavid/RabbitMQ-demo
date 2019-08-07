@@ -17,6 +17,7 @@ spring:
     publisher-confirms: true
     #开启发送失败退回
     publisher-returns: true
+
 #启用RabbitMQ运行状况检查。
 management:
   health:

@@ -14,7 +14,11 @@ public enum RabbitMQConstant {
 
     SIMPLE_QUEUE_NAME("hello"),
 
+    PULL_QUEUE_NAME("consumer-pull-queue"),
+
     SIMPLE_QUEUE_ROUTING_KEY("hello-routing-key"),
+
+    PULL_QUEUE_ROUTING_KEY("consumer-pull-routing-key"),
 
     //死信队列名
     DEAD_LETTER_QUEUE_NAME("dead-letter-queue"),

@@ -1,8 +1,12 @@
 package com.david.service;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.GetResponse;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.connection.Connection;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +40,7 @@ public class Producer {
                 return message;
             }
         };
-        rabbitTemplate.convertAndSend(exchange, routingKey, msg, processor);
     }
+
+
 }
