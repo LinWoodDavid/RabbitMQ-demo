@@ -25,6 +25,18 @@ public class RabbitmqTest extends DemoApplicationTests {
         }
         System.out.println("end");
     }
+
+    @Test
+    public void send() {
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 10; i++) {
+            String msg = new StringBuffer("msg").append(i + 1).toString();
+            rabbitTemplate.convertAndSend("direct-exchange", "consumer-pull-routing-key", msg);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
+    }
+
 }
 
 

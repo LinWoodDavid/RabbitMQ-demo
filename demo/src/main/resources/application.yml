@@ -2,9 +2,11 @@ server:
   port: 8080
 spring:
   rabbitmq:
-    host: 47.98.108.122
+    #host: 47.98.108.122
+    #username: LinWood_David
     port: 5672
-    username: LinWood_David
+    host: 192.168.159.133
+    username: David
     password: 123456
     virtual-host: /
     listener:
