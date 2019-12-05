@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * @Athor weimc
  * @CreateTime 2019/8/8 17:15
- * @Description: TODO
+ * @Description:
  */
 public class Demo2 {
 
@@ -31,6 +31,7 @@ public class Demo2 {
         Thread.sleep(1000 * 60 * 10);
         channel.basicAck(tag, false);//消息确认
     }
+
 }
 
 

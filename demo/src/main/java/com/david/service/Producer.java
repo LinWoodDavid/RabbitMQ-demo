@@ -8,6 +8,9 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,9 +23,8 @@ import javax.annotation.Resource;
  */
 @Component
 public class Producer {
-
-    @Resource
-    RabbitTemplate rabbitTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     /**
      * 发送消息到延迟队列
@@ -40,7 +42,18 @@ public class Producer {
                 return message;
             }
         };
+        rabbitTemplate.convertAndSend(exchange, routingKey, msg, processor);
     }
 
+    public void delayExchangeSend(String exchange, String routingKey, String msg, long millis) {
+        MessagePostProcessor processor = new MessagePostProcessor() {
+            @Override
+            public Message postProcessMessage(Message message) throws AmqpException {
+                message.getMessageProperties().setHeader("x-delay", 1);
+                return message;
+            }
+        };
+        rabbitTemplate.convertAndSend(exchange, routingKey, msg, processor);
+    }
 
 }

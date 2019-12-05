@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/RabbitMQ-demo.iml" filepath="$PROJECT_DIR$/.idea/RabbitMQ-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo-delay-exchange/demo-delay-exchange.iml" filepath="$PROJECT_DIR$/demo-delay-exchange/demo-delay-exchange.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo-ttl/demo-ttl.iml" filepath="$PROJECT_DIR$/demo-ttl/demo-ttl.iml" />
+    </modules>
+  </component>
+</project>

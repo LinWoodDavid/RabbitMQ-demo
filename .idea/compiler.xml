@@ -7,15 +7,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="demo" />
+        <module name="demo-ttl" />
+        <module name="demo-delay-exchange" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="demo" target="1.8" />
+      <module name="demo-delay-exchange" target="1.8" />
+      <module name="demo-ttl" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="demo" options="-parameters -extdirs D:\LindWood\workspace\RabbitMQ-demo\demo/src/lib" />
+      <module name="demo" options="-parameters -extdirs H:\workspace\RabbitMQ-demo\demo/src/lib" />
+      <module name="demo-delay-exchange" options="-parameters" />
+      <module name="demo-ttl" options="-parameters" />
     </option>
   </component>
 </project>

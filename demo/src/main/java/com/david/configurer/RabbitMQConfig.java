@@ -3,10 +3,7 @@ package com.david.configurer;
 import com.david.core.RabbitMQConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -86,7 +83,6 @@ public class RabbitMQConfig {
     @Bean
     public Queue simpleQueue() {
         Map<String, Object> arguments = new HashMap<>();
-        arguments.put("x-max-priority", 225);
         return new Queue(RabbitMQConstant.SIMPLE_QUEUE_NAME.getName(), true, false, false, arguments);
     }
 
@@ -96,6 +92,17 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(simpleQueue()).to(defaultExchange()).with(RabbitMQConstant.SIMPLE_QUEUE_ROUTING_KEY.getName());
     }
 
+    @Bean
+    public Queue testQueue() {
+        Map<String, Object> arguments = new HashMap<>();
+        return new Queue("test.default", true, false, false, arguments);
+    }
+
+    @Bean
+    public Binding bindingTestQueue() {
+        //队列绑定到exchange上，再绑定好路由键
+        return BindingBuilder.bind(testQueue()).to(new DirectExchange(, true, false)).with("test.default-key");
+    }
 
     /**
      * 声明用于拉取的队列 "consumer-pull-queue"
@@ -164,6 +171,28 @@ public class RabbitMQConfig {
     public Binding directBinding() {
         return BindingBuilder.bind(deadLetterQueue()).to(defaultExchange()).with(RabbitMQConstant.DEAD_LETTER_QUEUE_ROUTING_KEY.getName());
     }
+
     //************************************************ 延迟队列 end ************************************************
+    //************************************************ 死信交换机 start ************************************************
+
+    /**
+     * 死信交换机
+     *
+     * @return
+     */
+    @Bean
+    CustomExchange delayExchange() {
+        Map<String, Object> arguments = new HashMap<>();
+        arguments.put("x-delayed-type", "direct");
+        return new CustomExchange(RabbitMQConstant.DEAD_EXCHANGE_NAME.getName(), "x-delayed-message", true, false, arguments);
+        //return new DirectExchange(RabbitMQConstant.DEFAULT_EXCHANGE_NAME.getName(), true, false);
+    }
+
+    @Bean
+    public Binding delayBinding() {
+        return BindingBuilder.bind(deadLetterQueue()).to(delayExchange()).with(RabbitMQConstant.DEAD_LETTER_QUEUE_ROUTING_KEY.getName()).noargs();
+    }
+    //************************************************ 死信交换机 end ************************************************
+
 
 }

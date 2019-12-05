@@ -1,0 +1,29 @@
+server:
+  port: 8080
+spring:
+  rabbitmq:
+    port: 5672
+    host: localhost
+    username: root
+    password: root
+    virtual-host: /
+    listener:
+      direct:
+        prefetch: 2
+        #开启ack
+        acknowledge-mode: manual
+      simple:
+        acknowledge-mode: manual
+        prefetch: 2
+    #开启发送确认
+    publisher-confirms: true
+    #开启发送失败退回
+    publisher-returns: true
+    template:
+      mandatory: true
+
+#启用RabbitMQ运行状况检查。
+management:
+  health:
+    rabbit:
+      enabled: true

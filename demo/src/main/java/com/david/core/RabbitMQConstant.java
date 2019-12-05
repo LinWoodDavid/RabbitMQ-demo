@@ -12,6 +12,9 @@ public enum RabbitMQConstant {
     //默认交换机
     DEFAULT_EXCHANGE_NAME("direct-exchange"),
 
+    //死信交换机
+    DEAD_EXCHANGE_NAME("dead-direct-exchange"),
+
     SIMPLE_QUEUE_NAME("hello"),
 
     PULL_QUEUE_NAME("consumer-pull-queue"),
